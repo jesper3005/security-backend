@@ -34,7 +34,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`users_history`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`users_history` (
+CREATE TABLE IF NOT EXISTS `mydb`.`login_history` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `ip` VARCHAR(45) NOT NULL,
