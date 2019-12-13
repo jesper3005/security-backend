@@ -1,10 +1,6 @@
 package exceptions;
 
-/**
- *
- * @author lam@cphbusiness.dk
- */
-public class NotFoundException extends Exception{
+public class NotFoundException extends Exception {
 
     public NotFoundException(String message) {
         super(message);
@@ -12,5 +8,5 @@ public class NotFoundException extends Exception{
 
     public NotFoundException() {
         super("Requested item could not be found");
-    }  
+    }
 }
