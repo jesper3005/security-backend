@@ -16,7 +16,7 @@ public class TestUser {
 
     @BeforeClass
     public static void setUpClass() {
-        EntityManagerFactory emf = PuSelector.getEntityManagerFactory("pu");
+        EntityManagerFactory emf = PuSelector.getEntityManagerFactory("pu_unit_test");
         facade = UserFacade.getInstance(emf);
         TestUtils.setupTestUsers(emf);
     }
