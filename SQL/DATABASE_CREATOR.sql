@@ -20,19 +20,22 @@ USE `mydb` ;
 CREATE TABLE IF NOT EXISTS `mydb`.`users` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(45) NOT NULL,
-  `hashedPassword` VARCHAR(45) NOT NULL,
+  `hashedPassword` VARCHAR(60) NOT NULL,
   `salt` VARCHAR(45) NOT NULL,
   `phone` VARCHAR(45) NOT NULL,
   `firstName` VARCHAR(45) NOT NULL,
   `lastName` VARCHAR(45) NOT NULL,
   `age` INT NOT NULL,
   `gender` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`))
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
+  UNIQUE INDEX `phone_UNIQUE` (`phone` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`users_history`
+-- Table `mydb`.`login_history`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`login_history` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -41,6 +44,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`login_history` (
   `date` DATETIME NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `users_login-users-user_id_idx` (`user_id` ASC) VISIBLE,
+  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   CONSTRAINT `users_login-users-user_id`
     FOREIGN KEY (`user_id`)
     REFERENCES `mydb`.`users` (`id`)
