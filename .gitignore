@@ -22,6 +22,6 @@ persistence.xml
 # Local development Database
 pu.properties
 # Local test database
-pu_integration_test.properties
+pu_unit_test.properties
 
 /nbproject/
