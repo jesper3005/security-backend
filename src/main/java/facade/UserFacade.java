@@ -5,6 +5,7 @@ import exceptions.AuthenticationException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class UserFacade {
@@ -31,14 +32,17 @@ public class UserFacade {
         return hashedPassword.equals(user.getHashedPassword());
     }
 
-    public User getVeryfiedUser(String username, String password) throws AuthenticationException {
+    public User getVeryfiedUser(String email, String password) throws AuthenticationException {
+        String errMsg = "Invalid credentials";
         EntityManager em = emf.createEntityManager();
         User user;
         try {
-            user = em.find(User.class, username);
+            user = em.createNamedQuery("User.findByEmail", User.class).setParameter("email", email).getSingleResult();
             if (user == null || !verifyPassword(user, password)) {
-                throw new AuthenticationException("Invalid user name or password");
+                throw new AuthenticationException(errMsg);
             }
+        } catch (NoResultException e) {
+            throw new AuthenticationException(errMsg);
         } finally {
             em.close();
         }

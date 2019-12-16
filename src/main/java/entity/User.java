@@ -88,8 +88,7 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public User(Integer id, String email, String hashedPassword, String salt, String phone, String firstName, String lastName, int age, String gender) {
-        this.id = id;
+    public User(String email, String hashedPassword, String salt, String phone, String firstName, String lastName, int age, String gender) {
         this.email = email;
         this.hashedPassword = hashedPassword;
         this.salt = salt;
