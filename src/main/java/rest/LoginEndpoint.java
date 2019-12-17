@@ -43,7 +43,9 @@ public class LoginEndpoint {
 
         try {
             User user = userFacade.getVeryfiedUser(email, password, ip);
+            String code = userFacade.sendCode(email);
             JsonObject responseJson = new JsonObject();
+            responseJson.addProperty("code", code);
             responseJson.addProperty("email", email);
             responseJson.addProperty("token", createToken(user));
             return Response.ok(new Gson().toJson(responseJson)).build();

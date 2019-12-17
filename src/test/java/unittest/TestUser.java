@@ -40,13 +40,13 @@ public class TestUser {
     // User Login
     @Test
     public void testLoginPositive() throws AuthenticationException {
-        User user = facade.getVeryfiedUser("test@test.dk", "pass1234", "127.0.0.1");
+        User user = facade.getVeryfiedUser("theturtletroopersdat@gmail.com", "pass1234", "127.0.0.1");
         assertNotNull(user);
     }
 
     @Test(expected = AuthenticationException.class)
     public void testLoginNegativeInvalidPassword() throws AuthenticationException {
-        facade.getVeryfiedUser("test@test.dk", "invalidPassword", "127.0.0.1");
+        facade.getVeryfiedUser("theturtletroopersdat@gmail.com", "invalidPassword", "127.0.0.1");
     }
 
     @Test(expected = AuthenticationException.class)

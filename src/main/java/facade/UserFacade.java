@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import org.mindrot.jbcrypt.BCrypt;
+import utils.MailUtil;
 
 public class UserFacade {
 
@@ -54,7 +55,13 @@ public class UserFacade {
         return user;
     }
 
-    public void saveLoginAttempt(User user, String ip) {
+    public String sendCode(String email) {
+        String code = MailUtil.generateCode();
+        MailUtil.sendCode(email, code);
+        return code;
+    }
+
+    private void saveLoginAttempt(User user, String ip) {
         EntityManager em = emf.createEntityManager();
         LoginHistory loginHistory = new LoginHistory(ip, new Date());
         loginHistory.setUser(user);

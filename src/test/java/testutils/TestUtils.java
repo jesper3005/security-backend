@@ -12,9 +12,10 @@ public class TestUtils {
         try {
             em.getTransaction().begin();
             //Delete existing users and roles to get a "fresh" database
+            em.createQuery("delete from LoginHistory").executeUpdate();
             em.createQuery("delete from User").executeUpdate();
 
-            String email = "test@test.dk";
+            String email = "theturtletroopersdat@gmail.com";
             String salt = BCrypt.gensalt();
             String hashedPassword = BCrypt.hashpw("pass1234", salt);
             String phone = "+45 1234 4556";

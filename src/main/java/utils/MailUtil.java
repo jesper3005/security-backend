@@ -1,5 +1,6 @@
 package utils;
 
+import java.security.SecureRandom;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -7,18 +8,27 @@ import java.util.Properties;
 
 public class MailUtil {
 
-    public static void main(String[] args) {
+    public static String generateCode() {
+        String result = "";
+        for (int i = 0; i < 6; i++) {
+            SecureRandom sr = new SecureRandom();
+            result += String.valueOf(sr.nextInt(10));
+        }
+        return result;
+    }
 
-        final String username = Key.getEmail();
-        final String password = Key.getPassword();
+    public static boolean sendCode(String email, String code) {
+        final String username = "theturtletroopersdat@gmail.com";
+        final String password = "turtle2020";
 
-        Properties prop = new Properties();
+        Properties prop = new Properties(); // TLS
         prop.put("mail.smtp.host", "smtp.gmail.com");
         prop.put("mail.smtp.port", "587");
         prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.starttls.enable", "true"); //TLS
+        prop.put("mail.smtp.starttls.enable", "true");
 
         Session session = Session.getInstance(prop, new javax.mail.Authenticator() {
+            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }
@@ -27,20 +37,15 @@ public class MailUtil {
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("from@gmail.com"));
-            message.setRecipients(
-                    Message.RecipientType.TO,
-                    InternetAddress.parse("to_username_a@gmail.com, to_username_b@yahoo.com")
-            );
-            message.setSubject("Testing Gmail TLS");
-            message.setText("Dear Mail Crawler,"
-                    + "\n\n Please do not spam my email!");
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+            message.setSubject("TTT 2-Step: Code");
+            message.setText("Hello customer!\n\nHere is your code:\n" + code + "\n\nKinds regards TTT.");
 
             Transport.send(message);
-
-            System.out.println("Done");
-
+            return true;
         } catch (MessagingException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+        return false;
     }
 }
