@@ -29,8 +29,8 @@ import java.util.logging.Logger;
 @Path("login")
 public class LoginEndpoint {
 
-    public static final int TOKEN_EXPIRE_TIME = 1000 * 60 * 30; // ms * sec * min = 30 min
-    public static final UserFacade userFacade = UserFacade.getInstance(PuSelector.getEntityManagerFactory("pu"));
+    private static final int TOKEN_EXPIRE_TIME = 1000 * 60 * 30; // ms * sec * min = 30 min
+    private static final UserFacade USER_FACADE = UserFacade.getInstance(PuSelector.getEntityManagerFactory("pu"));
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -42,8 +42,8 @@ public class LoginEndpoint {
         String ip = json.get("ip").getAsString();
 
         try {
-            User user = userFacade.getVeryfiedUser(email, password, ip);
-            String code = userFacade.sendCode(email);
+            User user = USER_FACADE.getVeryfiedUser(email, password, ip);
+            String code = USER_FACADE.sendCode(email);
             JsonObject responseJson = new JsonObject();
             responseJson.addProperty("code", code);
             responseJson.addProperty("email", email);
