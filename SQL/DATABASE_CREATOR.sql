@@ -44,7 +44,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`login_history` (
   `date` DATETIME NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `users_login-users-user_id_idx` (`user_id` ASC) VISIBLE,
-  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   CONSTRAINT `users_login-users-user_id`
     FOREIGN KEY (`user_id`)

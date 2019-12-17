@@ -39,9 +39,10 @@ public class LoginEndpoint {
         JsonObject json = new JsonParser().parse(jsonString).getAsJsonObject();
         String email = json.get("email").getAsString();
         String password = json.get("password").getAsString();
+        String ip = json.get("ip").getAsString();
 
         try {
-            User user = userFacade.getVeryfiedUser(email, password);
+            User user = userFacade.getVeryfiedUser(email, password, ip);
             JsonObject responseJson = new JsonObject();
             responseJson.addProperty("email", email);
             responseJson.addProperty("token", createToken(user));
@@ -52,7 +53,7 @@ public class LoginEndpoint {
             }
             Logger.getLogger(GenericExceptionMapper.class.getName()).log(Level.SEVERE, null, ex);
         }
-        throw new AuthenticationException("Invalid email or password! Please try again");
+        throw new AuthenticationException("Somthing went wrong! Please try again");
     }
 
     private String createToken(User user) throws JOSEException {

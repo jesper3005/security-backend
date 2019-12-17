@@ -1,7 +1,9 @@
 package facade;
 
+import entity.LoginHistory;
 import entity.User;
 import exceptions.AuthenticationException;
+import java.util.Date;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -32,21 +34,37 @@ public class UserFacade {
         return hashedPassword.equals(user.getHashedPassword());
     }
 
-    public User getVeryfiedUser(String email, String password) throws AuthenticationException {
-        String errMsg = "Invalid credentials";
+    public User getVeryfiedUser(String email, String password, String ip) throws AuthenticationException {
         EntityManager em = emf.createEntityManager();
         User user;
         try {
             user = em.createNamedQuery("User.findByEmail", User.class).setParameter("email", email).getSingleResult();
-            if (user == null || !verifyPassword(user, password)) {
-                throw new AuthenticationException(errMsg);
+            if (user == null) {
+                throw new AuthenticationException("Invalid credentials");
+            }
+            saveLoginAttempt(user, ip);
+            if (!verifyPassword(user, password)) {
+                throw new AuthenticationException("Invalid credentials");
             }
         } catch (NoResultException e) {
-            throw new AuthenticationException(errMsg);
+            throw new AuthenticationException("Invalid credentials");
         } finally {
             em.close();
         }
         return user;
+    }
+
+    public void saveLoginAttempt(User user, String ip) {
+        EntityManager em = emf.createEntityManager();
+        LoginHistory loginHistory = new LoginHistory(ip, new Date());
+        loginHistory.setUser(user);
+        try {
+            em.getTransaction().begin();
+            em.persist(loginHistory);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
     }
 
 }

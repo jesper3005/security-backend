@@ -54,8 +54,7 @@ public class LoginHistory implements Serializable {
         this.id = id;
     }
 
-    public LoginHistory(Integer id, String ip, Date date) {
-        this.id = id;
+    public LoginHistory(String ip, Date date) {
         this.ip = ip;
         this.date = date;
     }
@@ -90,6 +89,7 @@ public class LoginHistory implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+        user.getLoginHistoryList().add(this);
     }
 
     @Override
