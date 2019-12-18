@@ -11,6 +11,7 @@ import entity.User;
 import exceptions.AuthenticationException;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
@@ -104,6 +105,33 @@ public class UserFacade {
             throw new AuthenticationException("Invalid Token!");
         }
         return new UserDTO(user);
+    }
+
+    public void deleteUser(String email, String token) throws AuthenticationException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            User user = em.createNamedQuery("User.findByEmail", User.class).setParameter("email", email).getSingleResult();
+            em.getTransaction().begin();
+            List<LoginHistory> attempts = em.createNamedQuery("LoginHistory.findByUserId", LoginHistory.class).setParameter("user_id", user.getId()).getResultList();
+            for (int i = 0; i < attempts.size(); i++) {
+                em.remove(attempts.get(i));
+            }
+            em.remove(user);
+            em.getTransaction().commit();
+        } catch (NoResultException e) {
+            throw new AuthenticationException("Invalid Token!");
+        }
+    }
+
+    public void sendMailWithAttempts(String email, String token) throws AuthenticationException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            User user = em.createNamedQuery("User.findByEmail", User.class).setParameter("email", email).getSingleResult();
+            List<LoginHistory> attempts = em.createNamedQuery("LoginHistory.findByUserId", LoginHistory.class).setParameter("user_id", user.getId()).getResultList();
+            MailUtil.sendMail(email, attempts);
+        } catch (NoResultException e) {
+            throw new AuthenticationException("Invalid Token!");
+        }
     }
 
 }

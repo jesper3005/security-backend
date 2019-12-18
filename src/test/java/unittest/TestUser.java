@@ -36,7 +36,6 @@ public class TestUser {
 //    public void testRegistrationNegativeInvalidPassword() throws IllegalArgumentException {
 //        assertTrue(false);
 //    }
-
     // User Login
     @Test
     public void testLoginPositive() throws AuthenticationException {
@@ -64,7 +63,6 @@ public class TestUser {
 //    public void testDeletionNegative() throws IllegalArgumentException {
 //        assertTrue(false);
 //    }
-
     // User information
 //    @Test
 //    public void testInformationPositive() throws IllegalArgumentException {

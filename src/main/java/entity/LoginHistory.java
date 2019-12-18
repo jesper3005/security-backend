@@ -24,7 +24,8 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "LoginHistory.findAll", query = "SELECT l FROM LoginHistory l")
     , @NamedQuery(name = "LoginHistory.findById", query = "SELECT l FROM LoginHistory l WHERE l.id = :id")
     , @NamedQuery(name = "LoginHistory.findByIp", query = "SELECT l FROM LoginHistory l WHERE l.ip = :ip")
-    , @NamedQuery(name = "LoginHistory.findByDate", query = "SELECT l FROM LoginHistory l WHERE l.date = :date")})
+    , @NamedQuery(name = "LoginHistory.findByDate", query = "SELECT l FROM LoginHistory l WHERE l.date = :date")
+    , @NamedQuery(name = "LoginHistory.findByUserId", query = "SELECT l FROM LoginHistory l WHERE l.user.id = :user_id")})
 public class LoginHistory implements Serializable {
 
     private static final long serialVersionUID = 1L;

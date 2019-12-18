@@ -24,13 +24,43 @@ public class UserEndpoint {
     @GET
     @Path("/information")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response loginByToken(String jsonString) throws AuthenticationException {
+    public Response login(String jsonString) throws AuthenticationException {
         JsonObject json = new JsonParser().parse(jsonString).getAsJsonObject();
         String email = json.get("email").getAsString();
         String token = json.get("token").getAsString();
         try {
             UserDTO user = USER_FACADE.getUserInformation(email, token);
             return Response.ok().entity(GSON.toJson(user)).build();
+        } catch (AuthenticationException ex) {
+            throw (AuthenticationException) ex;
+        }
+    }
+
+    @GET
+    @Path("/delete")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response delete(String jsonString) throws AuthenticationException {
+        JsonObject json = new JsonParser().parse(jsonString).getAsJsonObject();
+        String email = json.get("email").getAsString();
+        String token = json.get("token").getAsString();
+        try {
+            USER_FACADE.deleteUser(email, token);
+            return Response.ok().build();
+        } catch (AuthenticationException ex) {
+            throw (AuthenticationException) ex;
+        }
+    }
+
+    @GET
+    @Path("/attempts")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response attempts(String jsonString) throws AuthenticationException {
+        JsonObject json = new JsonParser().parse(jsonString).getAsJsonObject();
+        String email = json.get("email").getAsString();
+        String token = json.get("token").getAsString();
+        try {
+            USER_FACADE.sendMailWithAttempts(email, token);
+            return Response.ok().build();
         } catch (AuthenticationException ex) {
             throw (AuthenticationException) ex;
         }
