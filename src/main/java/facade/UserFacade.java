@@ -1,7 +1,10 @@
 package facade;
 
-import com.nimbusds.jose.util.Base64URL;
-import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWEObject;
+import com.nimbusds.jose.crypto.RSADecrypter;
+import com.nimbusds.jose.crypto.RSASSAVerifier;
+import com.nimbusds.jwt.SignedJWT;
 import dto.UserDTO;
 import entity.LoginHistory;
 import entity.User;
@@ -77,37 +80,23 @@ public class UserFacade {
         }
     }
 
-//    public void testExtendedLatinChars() throws Exception {
-//
-//        JWTClaimsSet claimsSet = new JWTClaimsSet.Builder().claim("fullName", "João").build();
-//
-//        String json = claimsSet.toJSONObject().toJSONString();
-//
-//        Base64URL base64URL = Base64URL.encode(json);
-//
-//        claimsSet = JWTClaimsSet.parse(base64URL.decodeToString());
-//
-//        System.out.println("João " + claimsSet.getStringClaim("fullName"));
-//    }
-    public int verifyToken(String token) throws AuthenticationException, ParseException {
+    public int verifyToken(String token) throws AuthenticationException {
         int id = 0;
-
-        Base64URL base64URL = Base64URL.encode(token);
-        JWTClaimsSet claimsSet = JWTClaimsSet.parse(base64URL.decodeToString());
-        System.out.println("João " + claimsSet.getStringClaim("fullName"));
-
+        // Reread token
+        // Retrieve id
         if (id == 0) {
             throw new AuthenticationException("Invalid Token");
         }
-        return 0;
+        return id;
     }
 
-    public UserDTO getUserInformation(String token) throws AuthenticationException, ParseException {
+    public UserDTO getUserInformation(String email, String token) throws AuthenticationException {
         EntityManager em = emf.createEntityManager();
         User user;
-        int id = verifyToken(token);
+        //int id = verifyToken(token);
         try {
-            user = em.createNamedQuery("User.findById", User.class).setParameter("id", id).getSingleResult();
+            //user = em.createNamedQuery("User.findById", User.class).setParameter("id", id).getSingleResult();
+            user = em.createNamedQuery("User.findByEmail", User.class).setParameter("email", email).getSingleResult();
             if (user == null) {
                 throw new AuthenticationException("Invalid Token!");
             }
