@@ -10,6 +10,28 @@ import java.util.Properties;
 
 public class MailUtil {
 
+    private static final String username = "theturtletroopersdat@gmail.com";
+    private static final String password = "turtle2020";
+
+    private static Properties createProperties() {
+        Properties prop = new Properties(); // TLS
+        prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true");
+        return prop;
+    }
+
+    private static Session createSession(Properties prop, final String username, final String password) {
+        Session session = Session.getInstance(prop, new javax.mail.Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
+        return session;
+    }
+
     public static String generateCode() {
         String result = "";
         for (int i = 0; i < 6; i++) {
@@ -20,22 +42,8 @@ public class MailUtil {
     }
 
     public static boolean sendCode(String email, String code) {
-        final String username = "theturtletroopersdat@gmail.com";
-        final String password = "turtle2020";
-
-        Properties prop = new Properties(); // TLS
-        prop.put("mail.smtp.host", "smtp.gmail.com");
-        prop.put("mail.smtp.port", "587");
-        prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.starttls.enable", "true");
-
-        Session session = Session.getInstance(prop, new javax.mail.Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
-            }
-        });
-
+        Properties prop = createProperties();
+        Session session = createSession(prop, username, password);
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("from@gmail.com"));
@@ -52,22 +60,8 @@ public class MailUtil {
     }
 
     public static boolean sendMail(String email, List<LoginHistory> list) {
-        final String username = "theturtletroopersdat@gmail.com";
-        final String password = "turtle2020";
-
-        Properties prop = new Properties(); // TLS
-        prop.put("mail.smtp.host", "smtp.gmail.com");
-        prop.put("mail.smtp.port", "587");
-        prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.starttls.enable", "true");
-
-        Session session = Session.getInstance(prop, new javax.mail.Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
-            }
-        });
-
+        Properties prop = createProperties();
+        Session session = createSession(prop, username, password);
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("from@gmail.com"));
@@ -76,7 +70,7 @@ public class MailUtil {
             String msg = "Hello customer!\n\nYou have requested a list of your login attempts, here is your attempts:\n";
             for (int i = 0; i < list.size(); i++) {
                 LoginHistory lh = list.get(i);
-                msg += i + ". " + lh.getDate().toString() + " - " + lh.getIp() + "\n";
+                msg += i + ". Date:" + lh.getDate().toString() + " - IP:" + lh.getIp() + "\n";
             }
             msg += "\n\nKinds regards TTT.";
             message.setText(msg);
